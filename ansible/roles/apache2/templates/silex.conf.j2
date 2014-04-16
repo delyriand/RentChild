@@ -1,0 +1,23 @@
+<VirtualHost {{apache_host}}:{{apache_port}}>
+    ServerAdmin                           {{ item['admin_email'] }}
+    ServerName                            {{ item['host'] }}
+{% for alias in item['aliases']|default([]) %}
+    ServerAlias                           {{ alias }}
+{% endfor %}
+
+{% if item['developer_mode'] %}
+    SetEnv IS_DEVELOPER_MODE 1
+{% endif %}
+
+    DirectoryIndex index.php
+    DocumentRoot {{ item['base'] }}/src/web
+    <Directory {{ item['base'] }}/src/web>
+        AllowOverride All
+        Order allow,deny
+        allow from all
+    </Directory>
+    
+    ErrorLog                     {{ item['base'] }}/logs/apache2/error.log
+    CustomLog                    {{ item['base'] }}/logs/apache2/access.log combined
+    php_admin_value error_log    {{ item['base'] }}/logs/php/error.log
+</VirtualHost>

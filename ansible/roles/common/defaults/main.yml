@@ -1,0 +1,6 @@
+system_packages:
+  - unzip
+  - vim
+  - curl 
+  - wget
+  - build-essential

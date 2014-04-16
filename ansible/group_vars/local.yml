@@ -1,0 +1,17 @@
+project_name: "rentchild"
+project_host: "rentchild.local"
+project_root: "/home/tuduri/Hosts/rentchild.local"
+
+#Apache config
+vhost_sites:
+  - {
+      host: "{{ project_host }}",
+      base: "{{ project_root }}",
+      admin_email: 'admin@example.com',
+      user: "www-data",
+      group: "www-data",
+      developer_mode: 1,
+    }
+
+#Mysql config
+mysql_root_db_pass: nimda

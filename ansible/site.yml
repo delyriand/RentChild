@@ -1,0 +1,9 @@
+- name: Apply common configuration to all nodes
+  hosts: all
+  remote_user: root
+  sudo: yes
+  roles:
+    - common
+    - apache2
+    - mysql
+    - crontab

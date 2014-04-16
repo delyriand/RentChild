@@ -1,0 +1,45 @@
+# Global project config
+
+#Apache config
+apache_host: "*"
+vhost_sites:
+  - {
+      host: "{{ project_host }}",
+      base: "{{ project_root }}",
+      admin_email: 'admin@example.com',
+      user: "www-data",
+      group: "www-data",
+    }
+
+#Mysql config
+mysql_root_db_pass: root
+mysql_databases:
+  - {
+      name: "{{ project_name }}",
+      encoding: "utf8",
+      collation: "utf8_general_ci",
+    }
+
+mysql_users:
+  - {
+      name: "{{ project_name }}",
+      password: "{{ project_name }}",
+    }
+
+# Crontab config
+#cron_tasks_add:
+#  - {
+#      name: "Crono",
+#      user: "www-data",
+#      minute: "*/5",
+#      hour: "*",
+#      day: "*",
+#      month: "*",
+#      weekday: "*",
+#      job: "php cron.php"
+#    }
+#cron_tasks_remove:
+#    - {
+#        cron_file: file_to_remove.cron,
+#        state: absent
+#    }

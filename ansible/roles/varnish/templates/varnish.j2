@@ -1,0 +1,28 @@
+# Configuration file for varnish
+#
+# /etc/init.d/varnish expects the variables $DAEMON_OPTS, $NFILES and $MEMLOCK
+# to be set from this shell script fragment.
+#
+
+# Should we start varnishd at boot?  Set to "yes" to enable.
+START={{ varnish_start }}
+
+# Maximum number of open files (for ulimit -n)
+NFILES={{ varnish_nfiles }}
+
+# Maximum locked memory size (for ulimit -l)
+# Used for locking the shared memory log in memory.  If you increase log size,
+# you need to increase this number as well
+MEMLOCK={{ varnish_memlock }}
+
+# Default varnish instance name is the local nodename.  Can be overridden with
+# the -n switch, to have more instances on a single server.
+INSTANCE={{ varnish_instance }}
+
+DAEMON_OPTS="-a {{ varnish_listen_address }}:{{ varnish_listen_port }} \
+             -T {{ varnish_admin_listen_address }}:{{ varnish_admin_listen_port }} \
+             -f {{ varnish_vcl_conf }} \
+             -S {{ varnish_secret_file }} \
+             -s file,{{ varnish_storage_file }},{{ varnish_storage_size }} \
+             -t {{ varnish_ttl }} \
+             -w{{varnish_min_threads}},{{varnish_max_threads}},{{varnish_thread_timeout}}"

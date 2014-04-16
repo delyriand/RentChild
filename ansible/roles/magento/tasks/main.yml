@@ -1,0 +1,16 @@
+#- name: Install samba packages.
+#  apt: pkg=samba state=present force=yes
+
+- stat: path={{ project_web_root }}/index.php
+  register: index_file
+
+- name: Create a temporary folder.
+  file: mode=775 state=directory path={{ project_folder }}/sources
+  when: index_file.stat.exists == false
+
+- name: Retrieve Magento archive
+  shell: wget ##URL##
+  register: magento_retrieve
+  when: index_file.stat.exists == false
+  
+- debug: var=magento_retrieve

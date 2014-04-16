@@ -1,0 +1,7 @@
+- include: install.yml
+
+- include: create-databases.yml
+  when: mysql_databases is defined
+
+- include: create-users.yml
+  when: mysql_users is defined

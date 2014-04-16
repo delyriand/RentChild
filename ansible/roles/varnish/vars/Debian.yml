@@ -1,0 +1,7 @@
+varnish_pkgs:
+  - varnish
+
+varnish_service: varnish
+varnish_conf_path: "/etc/default/varnish"
+
+varnish_debian_version: squeeze

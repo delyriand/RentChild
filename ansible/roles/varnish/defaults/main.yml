@@ -1,0 +1,42 @@
+varnish_start: yes
+varnish_nfiles: 131072
+varnish_memlock: 82000
+varnish_instance: "$(uname -n)"
+
+varnish_vcl_file: "default.vcl"
+varnish_vcl_conf: "/etc/varnish/{{ varnish_vcl_file }}"
+varnish_listen_address: ""
+varnish_listen_port: "6081"
+varnish_admin_listen_address: "localhost"
+varnish_admin_listen_port: "6082"
+varnish_min_threads: "2"
+varnish_max_threads: "500"
+varnish_thread_timeout: "300"
+varnish_storage_file: "/var/lib/varnish/$INSTANCE/varnish_storage.bin"
+varnish_storage_size: "1G"
+varnish_secret_file: "/etc/varnish/secret"
+varnish_ttl: "120"
+
+varnish_vcl_host: "127.0.0.1"
+varnish_vcl_port: "81"
+varnish_vcl_connect_timeout: 6000s
+varnish_vcl_first_byte_timeout: 6000s
+varnish_vcl_between_bytes_timeout: 6000s
+varnish_vcl_acl_admin_ips:
+  - "\"127.0.0.1\""
+varnish_vcl_acl_purge_ips:
+  - "\"127.0.0.1\""
+
+varnish_magento_vcl_access_admin_only_acl_admin: true
+varnish_magento_vcl_smile_magecache_module: true
+varnish_magento_vcl_esi_enabled: true
+varnish_vcl_magento_secret: "30819559c5ed7e4a992d4c1951efc2048c5a26df"
+varnish_magento_vcl_url_exceptions:
+  - admin
+  - sales
+  - wishlist
+  - review
+  - checkout
+  - customer
+  - api
+  - newsletter

@@ -1,0 +1,13 @@
+<VirtualHost {{apache_host}}:{{apache_port}}>
+    ServerAdmin                           {{ item['admin_email'] }}
+    ServerName                            {{ item['host'] }}
+{% for alias in item['aliases']|default([]) %}
+    ServerAlias                           {{ alias }}
+{% endfor %}
+
+    DocumentRoot                 {{ item['base'] }}/src
+    ErrorLog                     {{ item['base'] }}/logs/apache2/error.log
+    CustomLog                    {{ item['base'] }}/logs/apache2/access.log combined
+    php_admin_value error_log    {{ item['base'] }}/logs/php/error.log
+
+</VirtualHost>

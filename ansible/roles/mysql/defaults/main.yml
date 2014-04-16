@@ -1,0 +1,10 @@
+mysql_port: 3306
+mysql_user: mysql
+mysql_key_buffer: 16M
+mysql_max_allowed_packet: 16M
+mysql_thread_stack: 192K
+mysql_thread_cache_size: 
+mysql_query_cache_limit: 1M
+mysql_query_cache_size: 16M8
+
+mysql_root_db_pass: ""

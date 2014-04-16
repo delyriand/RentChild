@@ -1,0 +1,2 @@
+- name: varnish-restart
+  service: name={{ varnish_service }} state=restarted 

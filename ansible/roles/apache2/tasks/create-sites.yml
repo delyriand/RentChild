@@ -1,0 +1,37 @@
+- name: Create root folder
+  file:
+    path: "{{item['base']}}/src"
+    state: directory
+  with_items: vhost_sites
+
+- name: Create apache log folders
+  file:
+    path: "{{item['base']}}/logs/apache2"
+    state: directory
+    owner: "{{ item['user'] }}"
+    group: "{{ item['group'] }}"
+    mode: 775
+  with_items: vhost_sites
+
+- name: Create php log folders
+  file:
+    path: "{{item['base']}}/logs/php"
+    state: directory
+    owner: "{{ item['user'] }}"
+    group: "{{ item['group'] }}"
+    mode: 775
+  with_items: vhost_sites
+
+- name: Create apache2 vhosts
+  template:
+    src: silex.conf.j2
+    dest: /etc/apache2/sites-available/{{ item['host'] }}.conf
+  with_items: vhost_sites
+
+- name: Enable apache2 vhosts
+  file:
+    src: /etc/apache2/sites-available/{{ item['host'] }}.conf
+    dest: /etc/apache2/sites-enabled/{{ item['host'] }}.conf
+    state: link
+  with_items: vhost_sites
+  notify: restart apache

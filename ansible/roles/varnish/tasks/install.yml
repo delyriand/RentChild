@@ -1,0 +1,83 @@
+- name: Add the OS specific variables
+  include_vars: "{{ ansible_os_family }}.yml"
+
+- name: Add the varnish sources key in Debian derivatives
+  apt_key: 
+    url: "http://repo.varnish-cache.org/debian/GPG-key.txt"
+    state: present
+  environment: env
+  when: ansible_os_family == 'Debian' 
+
+- name: Add the varnish sources in Debian derivatives
+  apt_repository: 
+    repo: "deb http://repo.varnish-cache.org/debian/ {{ varnish_debian_version }} varnish-3.0"
+    state: present
+    update_cache: yes
+  environment: env
+  when: ansible_os_family == 'Debian' 
+  
+- name: Add the varnish sources (alternative) in Debian derivatives
+  lineinfile: 
+    dest: "/etc/apt/sources.list"
+    line: "deb http://repo.varnish-cache.org/debian/ {{ varnish_debian_version }} varnish-3.0"
+    state: present
+  environment: env
+  when: ansible_os_family == 'Debian' 
+
+- name: Install the varnish packages in Debian derivatives
+  apt:
+    name: "{{ item }}"
+    state: installed
+    update_cache: yes
+  with_items: varnish_pkgs
+  environment: env
+  when: ansible_os_family == 'Debian'
+  
+- name: Push varnish deamon configuration
+  template: 
+    src: varnish.j2
+    dest: "{{ varnish_conf_path }}"
+  notify:
+  - varnish-restart
+  
+- name: Push varnish vcl
+  template: 
+    src: "{{ varnish_vcl_type }}.vcl.j2"
+    dest: "{{ varnish_vcl_conf }}"
+    mode: 775
+  notify:
+  - varnish-restart
+  
+- name: Insure varnish deamon is running correctly
+  service:
+    name: "{{ varnish_service }}"
+    state: started
+  
+#- name: Copy the my.cnf file 
+#  template: src=my.cnf.{{ ansible_os_family }}.j2 dest={{ mysql_conf_dir }}/my.cnf
+#  notify: 
+#   - restart mysql
+#   
+#- name: Start the mysql services Redhat
+#  service: name={{ mysql_service }} state=started enabled=yes
+#
+#- name: Copy .my.cnf file with root password credentials
+#  template: src=my.cnf.j2 dest=~/.my.cnf mode=0600  
+#  
+#- name: Update mysql root password for all root accounts
+#  mysql_user: name=root host={{ item }} password={{ mysql_root_db_pass }}
+#  with_items:
+#   - "{{ ansible_hostname }}"
+#   - 127.0.0.1
+#   - ::1
+#   - localhost
+#  when: ansible_hostname != 'localhost' 
+#
+#- name: Ensure anonymous users are not in the database
+#  mysql_user: name='' host={{ item }} state=absent
+#  with_items:
+#   - localhost
+#   - "{{ ansible_hostname }}"
+#   
+#- name: Remove the test database
+#  mysql_db: name=test state=absent

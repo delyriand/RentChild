@@ -1,0 +1,2 @@
+- include: add-tasks.yml
+  when: cron_tasks_add is defined
